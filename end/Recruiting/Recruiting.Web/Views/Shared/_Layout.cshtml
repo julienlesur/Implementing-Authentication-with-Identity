@@ -30,6 +30,12 @@
                     <li class="nav-item" active-url="Applicants" comparer-mode="contains">
                         <a class="nav-link" asp-controller="Applicants" asp-action="List">Applicants</a>
                     </li>
+                    @if (User.IsInRole(Roles.Administrator))
+                    {
+                        <li class="nav-item" active-url="Accounts" comparer-mode="contains">
+                            <a class="nav-link" asp-controller="Accounts" asp-action="List">Accounts</a>
+                        </li>
+                    }
                 </ul>
             </div>
         }
