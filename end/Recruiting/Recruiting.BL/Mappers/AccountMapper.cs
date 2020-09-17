@@ -10,7 +10,7 @@ namespace Recruiting.BL.Mappers
 {
     public static class AccountMapper
     {
-        public static async Task<List<Account>> MapEntityToDomain(List<RecruitingUser> users, UserManager<RecruitingUser> userManager)
+        public static async Task<List<Account>> MapListEntitytoListDomain(List<RecruitingUser> users, UserManager<RecruitingUser> userManager)
         {
             List<Account> accounts = new List<Account>();
             foreach (RecruitingUser user in users)
@@ -20,6 +20,12 @@ namespace Recruiting.BL.Mappers
                 accounts.Add(account);
             }
             return accounts;
+        }
+        public static async Task<Account> MapEntityToDomain(RecruitingUser user, UserManager<RecruitingUser> userManager)
+        {
+            Account account = new Account { FullName = user.FullName, Email = user.UserName, UserId = user.Id, BirthDate = user.Birthdate };
+            account.Roles = await userManager.GetRolesAsync(user);
+            return account;
         }
     }
 }

@@ -14,17 +14,31 @@ namespace Recruiting.BL.Services
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<RecruitingUser> _userManager;
-        private Func<List<RecruitingUser>, UserManager<RecruitingUser>, Task<List<Account>>> _mapEntityToDomain;
+        private Func<List<RecruitingUser>, UserManager<RecruitingUser>, Task<List<Account>>> _mapListEntityToListDomain;
+        private Func<RecruitingUser, UserManager<RecruitingUser>, Task<Account>> _mapEntityToDomain;
 
         public AccountService(RoleManager<IdentityRole> roleManager, UserManager<RecruitingUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _mapListEntityToListDomain = AccountMapper.MapListEntitytoListDomain;
             _mapEntityToDomain = AccountMapper.MapEntityToDomain;
+        }
+
+        public async Task<Account> FindByIdAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            return await _mapEntityToDomain(user, _userManager);
         }
 
         public async Task<IEnumerable<Account>> GetAccountsAsync()
             =>
-                await _mapEntityToDomain(_userManager.Users.ToList(), _userManager);
+                await _mapListEntityToListDomain(_userManager.Users.ToList(), _userManager);
+
+        public Task<Account> UpdateAsync(Account account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

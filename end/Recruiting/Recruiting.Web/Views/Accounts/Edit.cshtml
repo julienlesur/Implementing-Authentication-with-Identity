@@ -1,0 +1,42 @@
+﻿@model Account
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input type="hidden" asp-for="UserId" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FullName"></label>
+                <input type="text" asp-for="FullName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input type="text" asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate"></label>
+                <input type="date" asp-for="BirthDate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Roles"></label>
+                <select multiple="multiple" asp-for="Roles">
+                    <option id="@Roles.Administrator"></option>
+                    <option id="@Roles.Manager"></option>
+                    <option id="@Roles.Recruiter"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator))
+            {
+                <a class="btn btn-secondary" asp-controller="Accounts" asp-action="List">Back to the account's list</a>
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
