@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,8 +32,14 @@ namespace Recruiting.Web
                 try
                 {
                     var context = services.GetRequiredService<RecruitingContext>();
-
                     SeedRecruitingContext.Initialize(context);
+
+                    var identityContext = services.GetRequiredService<IdentityContext>();
+                    var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                    var userManager = scope.ServiceProvider.GetService<UserManager<RecruitingUser>>();
+                    var config = host.Services.GetRequiredService<IConfiguration>();
+                    string defaultPwd = config["DefaultUSerPwd"];
+                    SeedIdentityContext.Initialize(identityContext, roleManager, userManager, defaultPwd).Wait();
                 }
                 catch (Exception ex)
                 {
