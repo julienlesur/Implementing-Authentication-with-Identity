@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Recruiting.Data.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Recruiting.Web.Areas.Identity
 {
-    public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<RecruitingUser>
+    public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<RecruitingUser, IdentityRole>
     {
-        public ApplicationUserClaimsPrincipalFactory(UserManager<RecruitingUser> userManager, IOptions<IdentityOptions> optionsAccessor) 
-            : base(userManager, optionsAccessor)
+        public ApplicationUserClaimsPrincipalFactory(UserManager<RecruitingUser> userManager, 
+                                                        RoleManager<IdentityRole> roleManager, 
+                                                        IOptions<IdentityOptions> options) 
+            : base(userManager, roleManager, options)
         {
         }
 

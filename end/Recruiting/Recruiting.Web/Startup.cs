@@ -36,9 +36,10 @@ namespace Recruiting.Web
                 .Configure<GridConfiguration>(Configuration.GetSection(GridConfiguration.GridOptions));
 
             services
-                .AddDefaultIdentity<RecruitingUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddIdentity<RecruitingUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<IdentityContext>()
-                .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>();
+                .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>()
+                .AddDefaultUI();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
