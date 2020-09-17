@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Recruiting.Data.Data;
 using Recruiting.Infrastructures.Configurations;
+using Recruiting.Web.Areas.Identity;
 
 namespace Recruiting.Web
 {
@@ -26,21 +28,17 @@ namespace Recruiting.Web
             services.AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter()));
             services.AddRazorPages();
 
-            services.AddDbContext<RecruitingContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("RecruitingContext")));
-
-            services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityContextConnection")));
-
-            services.AddDefaultIdentity<RecruitingUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<IdentityContext>();
-
             services
+                .AddDBContext(Configuration)
                 .AddEfRepositories()
                 .AddServices()
                 .AddHttpServices()
                 .Configure<GridConfiguration>(Configuration.GetSection(GridConfiguration.GridOptions));
 
+            services
+                .AddDefaultIdentity<RecruitingUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddClaimsPrincipalFactory<ApplicationUserClaimsPrincipalFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
