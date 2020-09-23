@@ -1,0 +1,20 @@
+﻿@model CheckBoxesGroupViewModel
+
+@{
+    var roles = String.Join(",", Model.SelectedElements);
+}
+
+<fieldset class="form-group">
+    <legend>@Model.GroupLegend</legend>
+    <input type="hidden" name="@Model.PropertyName" class="hidden-elements" value="@roles" />
+    <input type="hidden" name="@Model.PropertyChangedName" class="elements-changed" value="true" />
+    @foreach (string element in Model.Elements)
+    {
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="@element" checked="@(Model.SelectedElements.Contains(element))">
+                @element
+            </label>
+        </div>
+    }
+</fieldset>

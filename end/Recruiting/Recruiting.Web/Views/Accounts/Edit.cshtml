@@ -6,26 +6,22 @@
         <form method="post">
             <input type="hidden" asp-for="UserId" />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName"></label>
-                <input type="text" asp-for="FullName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                <input type="text" asp-for="Email" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate"></label>
-                <input type="date" asp-for="BirthDate" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Roles"></label>
-                <select multiple="multiple" asp-for="Roles">
-                    <option id="@Roles.Administrator"></option>
-                    <option id="@Roles.Manager"></option>
-                    <option id="@Roles.Recruiter"></option>
-                </select>
-            </div>
+            <fieldset>
+                <legend>My Account</legend>
+                <div class="form-group">
+                    <label asp-for="FullName"></label>
+                    <input type="text" asp-for="FullName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input type="text" asp-for="Email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="BirthDate"></label>
+                    <input type="date" asp-for="BirthDate" class="form-control" />
+                </div>
+            </fieldset>
+            @await Component.InvokeAsync("CheckBoxesGroup", new { elements = RoleManager.Roles.Select(r => r.Name).ToList(), selectedElements = Model.Roles, propertyName = "Roles", PropertyChangedName = "RolesChanged", groupLegend = "Roles" })
             <button type="submit" class="btn btn-primary">Save</button>
 
             @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator))
@@ -38,5 +34,6 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript" src="~/js/CheckBoxesGroup.js"></script>
 }
 

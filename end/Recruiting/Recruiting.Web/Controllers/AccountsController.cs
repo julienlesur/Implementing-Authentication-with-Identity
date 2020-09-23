@@ -4,6 +4,7 @@ using Recruiting.BL.Models;
 using Recruiting.BL.Services.Interfaces;
 using Recruiting.Data.Data;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Recruiting.Web.Controllers
@@ -28,7 +29,7 @@ namespace Recruiting.Web.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var account = await _accountService.FindByIdAsync(id);
-            if (account == null)
+            if (Account.IsEmpty(account))
             {
                 return RedirectToAction(nameof(AccountNotFound));
             }
@@ -38,12 +39,26 @@ namespace Recruiting.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string userId, [Bind("UserId, FullName, Email, Birthdate, Roles")] Account account)
+        public async Task<IActionResult> Edit(string userId, [Bind("UserId, FullName, Email, Birthdate")] Account account, string roles, bool rolesChanged)
         {
             if (ModelState.IsValid)
             {
                 var updatedApplicant = await _accountService.UpdateAsync(account);
-                return RedirectToAction("Index", "Home");
+                if (Account.IsEmpty(updatedApplicant))
+                {
+                    return RedirectToAction(nameof(AccountNotFound));
+                }
+
+                if (User.IsInRole(Roles.Administrator))
+                {
+                    if (rolesChanged)
+                    {
+                        await _accountService.UpdateRolesAsync(account, roles.Split(",").ToList());
+                    }
+                    return RedirectToAction("List", "Accounts");
+                }
+
+                return RedirectToAction("Edit", "Accounts", new { id = account.UserId});
             }
             return View(account);
         }

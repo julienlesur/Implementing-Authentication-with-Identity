@@ -20,25 +20,32 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Roles)
                 </th>
+                <th>
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var account in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => account.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => account.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => account.BirthDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => account.Roles)
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => account.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => account.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => account.BirthDate)
+                </td>
+                <td>
+                    @String.Join(", ", account.Roles)
+                </td>
+                <td class="d-flex justify-content-center">
+                    <a class="btn btn-sm" asp-controller="Accounts" asp-action="Edit" asp-route-id="@account.UserId" title="Edit account">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

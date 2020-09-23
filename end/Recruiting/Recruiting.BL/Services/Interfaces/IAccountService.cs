@@ -9,5 +9,6 @@ namespace Recruiting.BL.Services.Interfaces
         public Task<IEnumerable<Account>> GetAccountsAsync();
         public Task<Account> FindByIdAsync(string id);
         public Task<Account> UpdateAsync(Account account);
+        public Task UpdateRolesAsync(Account account, List<string> roles);
     }
 }

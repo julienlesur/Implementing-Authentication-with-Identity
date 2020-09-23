@@ -36,9 +36,24 @@ namespace Recruiting.BL.Services
             =>
                 await _mapListEntityToListDomain(_userManager.Users.ToList(), _userManager);
 
-        public Task<Account> UpdateAsync(Account account)
+        public async Task<Account> UpdateAsync(Account account)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(account.UserId);
+
+            user.UserName = account.Email;
+            user.Email = account.Email;
+            user.FullName = account.FullName;
+
+            var result = await _userManager.UpdateAsync(user);
+            return await _mapEntityToDomain(user, _userManager);
+        }
+
+        public async Task UpdateRolesAsync(Account account, List<string> roles)
+        {
+            var user = await _userManager.FindByIdAsync(account.UserId);
+            var formerRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, formerRoles);
+            await _userManager.AddToRolesAsync(user, roles);
         }
     }
 }
