@@ -13,7 +13,7 @@
         <div class="circle" id="myAccountMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@firstLetter</div>
         <ul class="dropdown-menu dropdown-bottom-right" aria-labelledby="myAccountMenuButton">
             <li><a class="dropdown-item" asp-controller="Accounts" asp-action="Edit" asp-route-id="@userId">Edit Profil</a></li>
-            <li><a class="dropdown-item" asp-controller="Accounts" asp-action="Edit" asp-route-id="@userId">Update password</a></li>
+            <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Update password</a></li>
             <li class="dropdown-divider"></li>
             <li><a class="dropdown-item" asp-controller="Accounts" asp-action="Logout">Logout</a></li>
         </ul>
