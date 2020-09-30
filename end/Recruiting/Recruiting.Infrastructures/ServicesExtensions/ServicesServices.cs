@@ -10,6 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<IApplicantService, ApplicantService>();
             services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             return services;
         }
