@@ -57,10 +57,17 @@ namespace Recruiting.Web.Controllers
                     }
                     return RedirectToAction("List", "Accounts");
                 }
+                TempData["Message"] = "The profil has been succesfully saved";
 
                 return RedirectToAction("Edit", "Accounts", new { id = account.UserId});
             }
             return View(account);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _accountService.Logout();
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccountNotFound()

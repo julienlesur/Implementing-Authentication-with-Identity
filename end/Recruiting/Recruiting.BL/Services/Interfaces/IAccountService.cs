@@ -10,5 +10,6 @@ namespace Recruiting.BL.Services.Interfaces
         public Task<Account> FindByIdAsync(string id);
         public Task<Account> UpdateAsync(Account account);
         public Task UpdateRolesAsync(Account account, List<string> roles);
+        Task Logout();
     }
 }
