@@ -1,6 +1,9 @@
 ﻿@model Account
 
-
+@if (!String.IsNullOrEmpty(TempData["Message"]?.ToString()))
+{
+    <div class="mt-2 alert alert-info">@TempData["Message"].ToString()</div>
+}
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -21,7 +24,10 @@
                     <input type="date" asp-for="BirthDate" class="form-control" />
                 </div>
             </fieldset>
-            @await Component.InvokeAsync("CheckBoxesGroup", new { elements = RoleManager.Roles.Select(r => r.Name).ToList(), selectedElements = Model.Roles, propertyName = "Roles", PropertyChangedName = "RolesChanged", groupLegend = "Roles" })
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator))
+            {
+                @await Component.InvokeAsync("CheckBoxesGroup", new { elements = RoleManager.Roles.Select(r => r.Name).ToList(), selectedElements = Model.Roles, propertyName = "Roles", PropertyChangedName = "RolesChanged", groupLegend = "Roles" })
+            }
             <button type="submit" class="btn btn-primary">Save</button>
 
             @if (SignInManager.IsSignedIn(User) && User.IsInRole(Roles.Administrator))

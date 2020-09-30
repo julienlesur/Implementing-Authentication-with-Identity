@@ -57,6 +57,7 @@ namespace Recruiting.Web.Controllers
                     }
                     return RedirectToAction("List", "Accounts");
                 }
+                TempData["Message"] = "The profil has been succesfully saved";
 
                 return RedirectToAction("Edit", "Accounts", new { id = account.UserId});
             }
