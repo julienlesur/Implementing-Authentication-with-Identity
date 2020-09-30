@@ -64,6 +64,12 @@ namespace Recruiting.Web.Controllers
             return View(account);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await _accountService.Logout();
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult AccountNotFound()
         {
             return View();

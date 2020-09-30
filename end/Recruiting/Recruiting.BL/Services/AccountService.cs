@@ -12,15 +12,16 @@ namespace Recruiting.BL.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<RecruitingUser> _userManager;
+        private readonly SignInManager<RecruitingUser> _signInManager;
         private Func<List<RecruitingUser>, UserManager<RecruitingUser>, Task<List<Account>>> _mapListEntityToListDomain;
         private Func<RecruitingUser, UserManager<RecruitingUser>, Task<Account>> _mapEntityToDomain;
 
-        public AccountService(RoleManager<IdentityRole> roleManager, UserManager<RecruitingUser> userManager)
+        public AccountService(UserManager<RecruitingUser> userManager,
+                                SignInManager<RecruitingUser> signInManager)
         {
-            _roleManager = roleManager;
             _userManager = userManager;
+            _signInManager = signInManager;
             _mapListEntityToListDomain = AccountMapper.MapListEntitytoListDomain;
             _mapEntityToDomain = AccountMapper.MapEntityToDomain;
         }
@@ -35,6 +36,11 @@ namespace Recruiting.BL.Services
         public async Task<IEnumerable<Account>> GetAccountsAsync()
             =>
                 await _mapListEntityToListDomain(_userManager.Users.ToList(), _userManager);
+
+        public async Task Logout()
+        {
+            await _signInManager.SignOutAsync();
+        }
 
         public async Task<Account> UpdateAsync(Account account)
         {
